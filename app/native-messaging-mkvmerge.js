@@ -268,7 +268,7 @@ const onNativeMessage = async e => {
       fileNames.push(outputFileName);
       // remove written files from filesystem
       for (const fileName of fileNames) {
-        (await dir.getFile(fileName)).remove();
+        await (await dir.getFile(fileName)).remove();
       };
       fileNames.length = 0;
     } else if (message === "stderr") {
