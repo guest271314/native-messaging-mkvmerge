@@ -1,0 +1,15 @@
+// Copyright 2013 The Chromium Authors. All rights reserved.
+// Use of this source code is governed by a BSD-style license that can be
+// found in the LICENSE file.
+
+{
+  "name": "native_messaging_mkvmerge",
+  "description": "Merge Matroska and WebM files using Native Messaging, mkvmerge, JavaScript",
+  "path": "/path/to/native-messaging-mkvmerge/host/native-messaging-host.js",
+  "type": "stdio",
+  "allowed_origins": [
+    "chrome-extension://knldjmfmopnpolahpmmgbagdohdnhkik/"
+  ],
+  "homepage_url": "https://github.com/guest271314/native-messaging-mkvmerge",
+  "author": "guest271314"
+}
