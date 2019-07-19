@@ -112,7 +112,10 @@ const sendNativeMessage = async e => {
           }
           // handle no audio track in media file, stream
           // output silence, capture, write audio track to file
-          // mkvmerge outputs error if tracks in files do not match 1:1
+          // mkvmerge outputs error if tracks in files do not match 1:1:A:V
+          // Using `-J` option WebM file output by MediaRecorder: 
+          // Chromium "audio_sampling_frequency": 48000
+          // Firefox "audio_sampling_frequency": 44100
           if (!audioTrack) {       
             audioContext = new AudioContext({sampleRate:44100});
             const audioStream = audioContext.createMediaStreamDestination();
