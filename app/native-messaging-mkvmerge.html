@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+  <head>
+   <title>native-messaging-mkvmerge</title>
+   <!-- 
+     https://github.com/guest271314/native-messaging-mkvmerge 
+     Merge Matroska and WebM files using Native Messaging, mkvmerge, JavaScript
+   -->
+   <style>
+     body{width:calc(98vw);}
+     video{display:block;position:relative;}
+     div{width:777px; display:block;position:relative;left:calc(50vw - 388.5px);}
+     textarea{width:777px;height:90px;}
+   </style>
+  </head>
+  <body>
+    <div>
+      <textarea id="sources" placeholder="(Separate URL's with space character)
+https://upload.wikimedia.org/wikipedia/commons/6/6e/Micronesia_National_Anthem.ogg#t=0,2
+https://mirrors.creativecommons.org/movingimages/webm/ScienceCommonsJesseDylan_240p.webm#t=0,2
+https://raw.githubusercontent.com/w3c/web-platform-tests/master/media-source/mp4/test.mp4#t=0,2 
+https://upload.wikimedia.org/wikipedia/commons/a/a4/Xacti-AC8EX-Sample_video-001.ogv#t=0,2" width="320" height="240">
+      </textarea>
+      <!-- 
+        Concatenate uploaded `File` objects to array of `Blob`s resulting from fetching URLs at `<textarea>` `value`
+      -->
+      <input type="file" multiple accept="video/*,audio/*">
+      <button id="connect-button">Connect</button>
+      <button id="send-message-button">Send</button>
+    </div>
+    <script src="./native-messaging-mkvmerge.js"></script>
+  </body>
+</html>
