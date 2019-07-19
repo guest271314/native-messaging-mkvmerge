@@ -4,7 +4,7 @@
 let [port, fileNames, appendTo, dir, result] = [null, [], "--append-to "];
 const [hostName, mimeType, cmd, options, metadata
   , outputFileName, randomFileName, getTrack] = [
-  "native_messaging_mkvmerge", "video/x-matroska;codecs=vp9,opus"
+  "native_messaging_mkvmerge", "video/webm;codecs=vp9,opus"
   // path to mkvmerge at OS
   , "./mkvmerge", "-o", "-J", "merged.webm"
   , _ => "_" + ".".repeat(16).replace(/./g, _ =>
