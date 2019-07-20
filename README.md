@@ -23,8 +23,9 @@ Tested at Chromium 77, which currently supports [Native File System](https://wic
 - Click `Connect`. 
 - Click `Send`.
 
-
 Output: A `<video>` element will be appended to the `HTML` `document` with `src` to a `Blob URL` representation of the merged media files as a `Blob`.
+
+Note: If the resulting `Blob` does not display all of the merged videos the first time `Connect` and `Send` are clicked, navigate to `chrome://extensions` select the extension, click `Reload`, then repeat the above process.
 
 # Uninstall
 Navigate to `chrome://extensions`, select the extenion, click `Remove`. Run `./uninstall_host.sh`.
