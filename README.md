@@ -22,6 +22,8 @@ Tested at Chromium 77, which currently supports [Native File System](https://wic
 - Upload files to `<input type="file" multiple>`.
 - Click `Connect`. 
 - Click `Send`.
+- Grant permission for `"Let sites read this folder"` prompt
+- Grant permission for `"Save changes to original files"` prompt
 
 Output: A `<video>` element will be appended to the `HTML` `document` with `src` to a `Blob URL` representation of the merged media files as a `Blob`.
 
