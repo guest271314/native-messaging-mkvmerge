@@ -31,6 +31,9 @@ const sendNativeMessage = async e => {
     dir = await self.chooseFileSystemEntries({
       type: "openDirectory"
     });
+    // https://bugs.chromium.org/p/chromium/issues/detail?id=986060
+    let status = await dir.requestPermission({ writable: true });
+    console.log(dir, status);
     // create array of files paths to fetch
     let media = sources.value.length ? sources.value.trim().match(/\S+/g)
       .map(src => {
@@ -95,6 +98,10 @@ const sendNativeMessage = async e => {
                   return controller = c;
                 },
                 async pull(_) {
+                  if (videoTrack.readyState === "ended") {
+                    controller.close();
+                    return;
+                  }
                   controller.enqueue(null);
                   await new Promise(resolve => setTimeout(resolve, 1000 / 60));
                 }
@@ -138,8 +145,8 @@ const sendNativeMessage = async e => {
           };
           recorder.ondataavailable = async e => {
             resolve(e.data);
-            if (controller) {
-              controller.close();
+            if (videoTrack.readyState !== "ended") {
+              videoTrack.stop();
             };
             if (audioContext) {
               await audioContext.close();
@@ -271,7 +278,7 @@ const onNativeMessage = async e => {
       fileNames.push(outputFileName);
       // remove written files from filesystem
       for (const fileName of fileNames) {
-        await (await dir.getFile(fileName)).remove();
+        await dir.removeEntry(fileName);
       };
       fileNames.length = 0;
     } else if (message === "stderr") {
