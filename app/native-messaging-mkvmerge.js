@@ -33,12 +33,8 @@ const sendNativeMessage = async e => {
     });
     // https://bugs.chromium.org/p/chromium/issues/detail?id=986060
     query = await dir.queryPermission({writable: true});
-    if (query !== "granted") {
-       status = await dir.requestPermission({writable: true});
-    };
+    status = await dir.requestPermission({writable: true});
     console.log(dir, query, status);
-    // create array of files paths to fetch
-    console.log(dir, status);
     // create array of files paths to fetch
     let media = sources.value.length ? sources.value.trim().match(/\S+/g)
       .map(src => {
