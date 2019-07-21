@@ -14,6 +14,9 @@ const [hostName, mimeType, cmd, options, metadata
 const connectButton = document.getElementById("connect-button");
 const sendMessageButton = document.getElementById("send-message-button");
 const sources = document.getElementById("sources");
+// permision status of `dir` is "prompt" and `DOMException` thrown if files 
+// are not uploaded from same folder as later requested file read/write access
+// https://bugs.chromium.org/p/chromium/issues/detail?id=986107
 const inputFiles = document.querySelector("input[type=file]");
 // update HTML
 const updateUiState = _ => {
