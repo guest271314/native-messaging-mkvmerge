@@ -19,7 +19,7 @@ Tested at Chromium 77, which currently supports [Native File System](https://wic
 - Click `native-messaging-mkvmerge` icon.
 - Input URL's to media files the `<video>` element can play, optionally including a media fragment identifier, to fetch delimited by space character at `<textarea>` element, e.g., `<textarea>https://path/to/0.ogg#t=0,2 https://path/to/1.webm#t=0,2 https://path/to/2.mp4 https:/path/to/3.ogv
 </textarea>` to be played and recorded using `MediaRecorder`.
-- Upload files to `<input type="file" multiple>`.
+- Optionally upload files from `host` folder to `<input type="file" multiple>`.
 - Click `Connect`. 
 - Click `Send`.
 - Grant permission for `"Let sites read this folder"` prompt
