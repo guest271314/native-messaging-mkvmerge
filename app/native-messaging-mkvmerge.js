@@ -152,7 +152,7 @@ const sendNativeMessage = async e => {
             if (videoTrack.readyState !== "ended") {
               videoTrack.stop();
             };
-            if (audioContext) {
+            if (audioContext && audioContext.state === "running") {
               await audioContext.close();
             };
           };
