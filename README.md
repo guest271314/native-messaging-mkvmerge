@@ -7,13 +7,14 @@ Tested at Chromium 77, which currently supports [Native File System](https://wic
 - Download the repository. 
 - Build [MKVToolNix](https://gitlab.com/mbunkus/mkvtoolnix).
 - Save `mkvmerge` in `host` folder. 
-- Open `native_messaging_mkvmerge.json` within `host` folder, if different than default value, set value of `"path"` path to `native-messaging-host.js`.
-- If different than default value set `TARGET_DIR` within `install_host.sh` and `uninstall_host.sh` to point to `NativeMessagingHost` folder within Chromium user data directory.
+- Open `native_messaging_mkvmerge.json` within `host` folder in a text editor. Set value of `"path"` to local path to `native-messaging-host.js`.
+- Open `install_host.sh` and `uninstall_host.sh` within `host` folder in a text editor. Set the value of `TARGET_DIR` within `install_host.sh` and `uninstall_host.sh` to point to `NativeMessagingHost` folder within Chromium user data directory.
 - Set `mkvmerge`, `.js` and `.sh` files executable.
 - Install `nodejs`.
 - Run `./install_host.sh`. 
 - At `chrome://extensions` set `Developer mode` to on. 
 - Click `Load unpacked`.
+- Select `app` folder.
 
 # Usage 
 - Click `Apps` on Chromium browser bookmarks bar. 
