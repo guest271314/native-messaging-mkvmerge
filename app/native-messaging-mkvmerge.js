@@ -257,27 +257,18 @@ const onNativeMessage = async e => {
       // At Chromium 77 throws net error GET blob:chrome-extension://<extension> net::ERR_FILE_NOT_FOUND
       // https://github.com/WICG/native-file-system/issues/70
       // https://bugs.chromium.org/p/chromium/issues/detail?id=985665
-      // `outputFileName` is name of a file on disk
-      // that will be deleted at the code below
-      result = await (await dir.getFile(outputFileName, {
+      // `outputFileName` which is an element of and including `fileNames` array
+      // are files on disk that will be deleted at the code below
+      result = new Blob([await (await (await dir.getFile(outputFileName, {
         create: false
-      })).getFile();
+      })).getFile()).arrayBuffer()], {type:mimeType});
       // result of `FileSystemFileHandle.getFile()`
       console.log({result});
-      // workaround for `result` `File` object throwing `net` error
-      // when passed to `URL.createObjectURL()`
-      // `stream()` `Blob()` to `Response()`, set `Headers()` to `mimeType` 
-      // create a copy of the file that will be deleted from disk below       
-      const mergedFile = await new Response(result.stream(), {
-        headers: new Headers({
-          "Content-Type": mimeType
-        })
-      }).blob();    
       // do stuff with merged file   
       const video = document.createElement("video");
       // passing `result` to `URL.createObjectURL()` does not work
       // at Chromium 77; does not GET the File
-      const blobURL = URL.createObjectURL(mergedFile);
+      const blobURL = URL.createObjectURL(result);
       video.controls = true;
       video.onresize = e => video.style.left = `calc(50vw - ${video.videoWidth/2}px)`;    
       video.src = blobURL;
