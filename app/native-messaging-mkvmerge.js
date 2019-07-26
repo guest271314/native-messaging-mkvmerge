@@ -1,7 +1,7 @@
 // native-messaging-mkvmerge 
 // Merge Matroska and WebM files using Native Messaging, mkvmerge, JavaScript
 // https://github.com/guest271314/native-messaging-mkvmerge
-let [port, fileNames, appendTo, dir, query, status, result] = [null, [], "--append-to "];
+let [port, fileNames, appendTo, dir, status, result] = [null, [], "--append-to "];
 const [hostName, mimeType, cmd, options, metadata
   , outputFileName, randomFileName, getTrack] = [
   "native_messaging_mkvmerge", "video/webm;codecs=vp9,opus"
@@ -35,7 +35,6 @@ const sendNativeMessage = async e => {
       type: "openDirectory"
     });
     // https://bugs.chromium.org/p/chromium/issues/detail?id=986060
-    query = await dir.queryPermission({writable: true});
     status = await dir.requestPermission({writable: true});
     console.log(dir, query, status);
     // create array of files paths to fetch
