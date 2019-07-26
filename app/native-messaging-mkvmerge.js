@@ -256,6 +256,9 @@ const onNativeMessage = async e => {
     if (message === "output") {
       // At Chromium 77 throws net error GET blob:chrome-extension://<extension> net::ERR_FILE_NOT_FOUND
       // https://github.com/WICG/native-file-system/issues/70
+      // https://bugs.chromium.org/p/chromium/issues/detail?id=985665
+      // `outputFileName` is name of a file on disk
+      // that will be deleted at the code below
       result = await (await dir.getFile(outputFileName, {
         create: false
       })).getFile();
@@ -263,12 +266,13 @@ const onNativeMessage = async e => {
       console.log({result});
       // workaround for `result` `File` object throwing `net` error
       // when passed to `URL.createObjectURL()`
-      // `stream()` `Blob()` to `Response()`, set `Headers()` to `mimeType`    
+      // `stream()` `Blob()` to `Response()`, set `Headers()` to `mimeType` 
+      // create a copy of the file that will be deleted from disk below       
       const mergedFile = await new Response(result.stream(), {
         headers: new Headers({
           "Content-Type": mimeType
         })
-      }).blob();   
+      }).blob();    
       // do stuff with merged file   
       const video = document.createElement("video");
       // passing `result` to `URL.createObjectURL()` does not work
@@ -280,7 +284,7 @@ const onNativeMessage = async e => {
       document.body.appendChild(video);
       console.log(result, blobURL);
       fileNames.push(outputFileName);
-      // remove written files from filesystem
+      // delete written files from filesystem
       for (const fileName of fileNames) {
         await dir.removeEntry(fileName);
       };
