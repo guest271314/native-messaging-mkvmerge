@@ -5,7 +5,7 @@ let [port, fileNames, appendTo, dir, status, result] = [null, [], "--append-to "
 const [hostName, mimeType, cmd, options, metadata
   , outputFileName, randomFileName, getTrack] = [
   "native_messaging_mkvmerge", "video/webm;codecs=vp8,opus"
-  // path to mkvmerge at OS
+  // path to mkvmerge within host or other directory
   , "./mkvmerge", "-o", "-J", "merged.webm"
   , _ => "_" + ".".repeat(16).replace(/./g, _ =>
   "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ"[~~(Math.random() * 36)])
@@ -269,7 +269,10 @@ const onNativeMessage = async e => {
       // at Chromium 77; does not GET the File
       const blobURL = URL.createObjectURL(result);
       video.controls = true;
-      video.onresize = e => video.style.left = `calc(50vw - ${video.videoWidth/2}px)`;    
+      video.onresize = e => {
+        video.style.left = `calc(50vw - ${video.videoWidth/2}px)`;
+        console.log(video.videoWidth, video.videoHeight);
+      };     
       video.src = blobURL;
       document.body.appendChild(video);
       console.log(result, blobURL);
