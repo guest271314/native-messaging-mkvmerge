@@ -5,7 +5,7 @@ Tested at Chromium 77, which currently supports [Native File System](https://wic
 
 # Install
 - Download the repository. 
-- Build [MKVToolNix](https://gitlab.com/mbunkus/mkvtoolnix).
+- Build or install [MKVToolNix](https://gitlab.com/mbunkus/mkvtoolnix).
 - Save `mkvmerge` in `host` folder. 
 - Open `native_messaging_mkvmerge.json` within `host` folder in a text editor. Set value of `"path"` to local path to `native-messaging-host.js`.
 - Open `install_host.sh` and `uninstall_host.sh` within `host` folder in a text editor. Set the value of `TARGET_DIR` within `install_host.sh` and `uninstall_host.sh` to point to `NativeMessagingHost` folder within Chromium user data directory.
