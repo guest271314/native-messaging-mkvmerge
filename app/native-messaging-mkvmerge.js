@@ -62,7 +62,6 @@ const sendNativeMessage = async e => {
       console.log("No files to merge");
       return;
     }
-console.log(media);
     const recordings = await Promise.all(media.map(data => new Promise(async resolve => {
         const {
           src, hash
@@ -75,7 +74,6 @@ console.log(media);
         }
         blob = request instanceof Response ? await request.blob() : src;
         const blobURL = URL.createObjectURL(blob) + hash;
-//console.log(blob, blobURL, src);
         let [audioContext, canvas, ctx, canvasStream, imageData, mediaStream, recorder, width, height, rs, controller, audioTrack, videoTrack] = [];
         video.onloadedmetadata = async _ => {
           try {
@@ -141,7 +139,6 @@ console.log(media);
               const aw = new AudioWorkletNode(audioContext, "output-silence");
               aw.connect(audioStream);
               aw.connect(audioContext.destination);
-
             }
             await video.play();
           } catch (e) {
@@ -149,7 +146,7 @@ console.log(media);
             throw e;
           }
         };
-        video.onplay = async _ => {
+        video.onplay = _ => {
           recorder = new MediaRecorder(mediaStream, {
             mimeType
           });
@@ -224,18 +221,16 @@ console.log(media);
     const tracks = filesMetadata.map(({tracks}) => tracks);
     const trackList = tracks.map(track => ({audio:getTrack(track, "audio").id, video:getTrack(track, "video").id}));
     // check if tracks are ordered AV,AV...AV or arbitrarily AV,VA,AV,AV,VA...AV
-    const orderedTracks = tracks.every(([{
-      type
-    }]) => type === "audio");
+    const orderedTracks = tracks.every(([{type}]) => type === "audio");
     // construct `--append-to` option for merging files where
     // tracks are not in consistent order; for example, WebM
     // files output by Chromium, Firefox MediaRecorder implementations 
     // Chromium => Opus: "id": 0, Firefox => Opus: "id": 1,
     // Chromium => VP8: "id": 1, Firefox => VP8: "id": 0 
-    trackList.reduce((a, b, index) => {
-      appendTo += `${index}:${b.audio}:${index-1}:${a.audio},${index}:${b.video}:${index-1}:${a.video}${trackList[index+1]?",":""}`;
-      return b;
-    });
+    trackList.reduce((a, b, index) => (
+      appendTo += `${index}:${b.audio}:${index-1}:${a.audio},${index}:${b.video}:${index-1}:${a.video}${trackList[index+1]?",":""}`
+      , b
+    );
     console.log(trackList, JSON.stringify({
       filesMetadata, orderedTracks, appendTo
     }, null, 2));
