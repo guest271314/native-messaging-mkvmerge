@@ -3,7 +3,7 @@
 // https://github.com/guest271314/native-messaging-mkvmerge
 let [port, fileNames, appendTo, dir, status, result] = [null, [], "--append-to "];
 const [hostName, mimeType, cmd, options, metadata, outputFileName, randomFileName, getTrack] = [
-  // vp9 does not output variable resolution
+  // use VP8, VP9 does not output variable resolution at Chromium
   "native_messaging_mkvmerge", "video/webm;codecs=vp8,opus"
   // path to mkvmerge at OS
   , "./mkvmerge", "-o", "-J", "merged.webm", _ => "_" + ".".repeat(16).replace(/./g, _ =>
