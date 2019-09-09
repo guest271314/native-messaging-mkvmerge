@@ -3,7 +3,7 @@
 // https://github.com/guest271314/native-messaging-mkvmerge
 let [port, fileNames, appendTo, dir, status, result] = [null, [], "--append-to "];
 const [hostName, mimeType, cmd, options, metadata, outputFileName, randomFileName, getTrack] = [
-  "native_messaging_mkvmerge", "video/webm;codecs=vp8,opus"
+  "native_messaging_mkvmerge", "video/webm;codecs=vp9,opus"
   // path to mkvmerge at OS
   , "./mkvmerge", "-o", "-J", "merged.webm", _ => "_" + ".".repeat(16).replace(/./g, _ =>
     "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ" [~~(Math.random() * 36)]), (tracks, type) => tracks.find(({
@@ -106,7 +106,7 @@ const sendNativeMessage = async e => {
                       return;
                     }
                     controller.enqueue(null);
-                    await new Promise(resolve => requestAnimationFrame(_ => resolve()));
+                    await new Promise(resolve => setTimeout(resolve, 0));
                   }
               }).pipeTo(new WritableStream({
                 write() {
