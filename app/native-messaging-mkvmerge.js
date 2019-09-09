@@ -62,6 +62,7 @@ const sendNativeMessage = async e => {
       console.log("No files to merge");
       return;
     }
+console.log(media);
     const recordings = await Promise.all(media.map(data => new Promise(async resolve => {
         const {
           src, hash
@@ -74,6 +75,7 @@ const sendNativeMessage = async e => {
         }
         blob = request instanceof Response ? await request.blob() : src;
         const blobURL = URL.createObjectURL(blob) + hash;
+//console.log(blob, blobURL, src);
         let [audioContext, canvas, ctx, canvasStream, imageData, mediaStream, recorder, width, height, rs, controller, audioTrack, videoTrack] = [];
         video.onloadedmetadata = async _ => {
           try {
@@ -114,7 +116,7 @@ const sendNativeMessage = async e => {
                   ctx.fillStyle = "#000000";
                   ctx.fillRect(0, 0, width, height);
                   videoTrack.requestFrame();
-                  console.log("video frame written");
+                  // console.log("video frame written");
                 }
               }));
             } else {
@@ -219,40 +221,22 @@ const sendNativeMessage = async e => {
         });
       });
     };
+    const tracks = filesMetadata.map(({tracks}) => tracks);
+    const trackList = tracks.map(track => ({audio:getTrack(track, "audio").id, video:getTrack(track, "video").id}));
+    // check if tracks are ordered AV,AV...AV or arbitrarily AV,VA,AV,AV,VA...AV
+    const orderedTracks = tracks.every(([{
+      type
+    }]) => type === "audio");
     // construct `--append-to` option for merging files where
     // tracks are not in consistent order; for example, WebM
     // files output by Chromium, Firefox MediaRecorder implementations 
     // Chromium => Opus: "id": 0, Firefox => Opus: "id": 1,
     // Chromium => VP8: "id": 1, Firefox => VP8: "id": 0 
-    for (let i = 0; i < filesMetadata.length; i++) {
-      const {
-        tracks: currentTracks
-      } = filesMetadata[i];
-      const currentAudioTrack = getTrack(currentTracks, "audio").id;
-      const currentVideoTrack = getTrack(currentTracks, "video").id;
-      if (filesMetadata[i + 1]) {
-        const {
-          tracks: nextTracks
-        } = filesMetadata[i + 1];
-        const nextAudioTrack = getTrack(nextTracks, "audio").id;
-        const nextVideoTrack = getTrack(nextTracks, "video").id;
-        appendTo += `${i+1}:${nextAudioTrack}:${i}:${currentAudioTrack},${i+1}:${nextVideoTrack}:${i}:${currentVideoTrack},`;
-      } else {
-        const {
-          tracks: previousTracks
-        } = filesMetadata[i - 1];
-        const previousAudioTrack = getTrack(previousTracks, "audio").id;
-        const previousVideoTrack = getTrack(previousTracks, "video").id;
-        appendTo += `${i}:${currentAudioTrack}:${i-1}:${previousAudioTrack},${i}:${currentVideoTrack}:${i-1}:${previousVideoTrack}`;
-      }
-    };
-    // check if tracks are ordered AV,AV...AV or arbitrarily AV,VA,AV,AV,VA...AV
-    const orderedTracks = filesMetadata.map(({
-      tracks
-    }) => tracks).every(([{
-      type
-    }]) => type === "audio");
-    console.log(JSON.stringify({
+    trackList.reduce((a, b, index) => {
+      appendTo += `${index}:${b.audio}:${index-1}:${a.audio},${index}:${b.video}:${index-1}:${a.video}${trackList[index+1]?",":""}`;
+      return b;
+    });
+    console.log(trackList, JSON.stringify({
       filesMetadata, orderedTracks, appendTo
     }, null, 2));
     port.onMessage.addListener(onNativeMessage);
