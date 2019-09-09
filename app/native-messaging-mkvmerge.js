@@ -230,7 +230,7 @@ const sendNativeMessage = async e => {
     trackList.reduce((a, b, index) => (
       appendTo += `${index}:${b.audio}:${index-1}:${a.audio},${index}:${b.video}:${index-1}:${a.video}${trackList[index+1]?",":""}`
       , b
-    );
+    ));
     console.log(trackList, JSON.stringify({
       filesMetadata, orderedTracks, appendTo
     }, null, 2));
