@@ -3,6 +3,7 @@
 // https://github.com/guest271314/native-messaging-mkvmerge
 let [port, fileNames, appendTo, dir, status, result] = [null, [], "--append-to "];
 const [hostName, mimeType, cmd, options, metadata, outputFileName, randomFileName, getTrack] = [
+  // vp9 does not output variable resolution
   "native_messaging_mkvmerge", "video/webm;codecs=vp8,opus"
   // path to mkvmerge at OS
   , "./mkvmerge", "-o", "-J", "merged.webm", _ => "_" + ".".repeat(16).replace(/./g, _ =>
@@ -67,12 +68,8 @@ const sendNativeMessage = async e => {
           src, hash
         } = data;
         const video = document.createElement("video");
-        let blob;
-        let request;
-        if (!(src instanceof File)) {
-          request = await fetch(src);
-        }
-        blob = request instanceof Response ? await request.blob() : src;
+        const request = await fetch(src instanceof File ? URL.createObjectURL(src) : src);
+        const blob = await request.blob();
         const blobURL = URL.createObjectURL(blob) + hash;
         let [audioContext, canvas, ctx, canvasStream, imageData, mediaStream, recorder, width, height, rs, controller, audioTrack, videoTrack] = [];
         video.onloadedmetadata = async _ => {
@@ -227,6 +224,8 @@ const sendNativeMessage = async e => {
     // files output by Chromium, Firefox MediaRecorder implementations 
     // Chromium => Opus: "id": 0, Firefox => Opus: "id": 1,
     // Chromium => VP8: "id": 1, Firefox => VP8: "id": 0 
+    // merging a WebM file output by MediaRecorder at Chromium 
+    // with a WebM file produced by MediaRecorder at Firefox crashes tab
     trackList.reduce((a, b, index) => (
       appendTo += `${index}:${b.audio}:${index-1}:${a.audio},${index}:${b.video}:${index-1}:${a.video}${trackList[index+1]?",":""}`
       , b
