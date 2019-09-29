@@ -257,7 +257,7 @@ const onNativeMessage = async e => {
     message, body
   } = e;
   try {
-    // get file written to filesystem using native file sysytem
+    // get file written to filesystem using native file system
     if (message === "output") {
       // At Chromium 77 throws net error GET blob:chrome-extension://<extension> net::ERR_FILE_NOT_FOUND
       // https://github.com/WICG/native-file-system/issues/70
