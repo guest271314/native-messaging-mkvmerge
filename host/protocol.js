@@ -1,3 +1,4 @@
+#!/usr/bin/env node
 // https://github.com/simov/native-messaging
 module.exports = (handleMessage) => {
 
