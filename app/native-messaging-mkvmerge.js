@@ -32,7 +32,7 @@ const updateUiState = _ => {
 const sendNativeMessage = async e => {
   try {
     dir = await self.chooseFileSystemEntries({
-      type: "openDirectory"
+      type: "open-directory"
     });
     // https://bugs.chromium.org/p/chromium/issues/detail?id=986060
     status = await dir.requestPermission({
