@@ -31,9 +31,7 @@ const updateUiState = _ => {
   // send native message to host
 const sendNativeMessage = async e => {
   try {
-    dir = await self.chooseFileSystemEntries({
-      type: "open-directory"
-    });
+    dir = await self["chooseFileSystemEntries" in self ? "chooseFileSystemEntries" : "showDirectoryPicker"]
     // https://bugs.chromium.org/p/chromium/issues/detail?id=986060
     status = await dir.requestPermission({
       writable: true
@@ -184,8 +182,8 @@ const sendNativeMessage = async e => {
           const fileHandle = await dir.getFile(fileName, {
             create: true
           });
-          const writer = await fileHandle.createWriter();
-          const writeFile = await writer.write(0, blob);
+          const writer = await fileHandle["createWriter" in fileHandle ? "createWriter" : "createWritable"]();
+          const writeFile = await writer.write(blob);
           return await writer.close();
         } catch (e) {
           throw e;
