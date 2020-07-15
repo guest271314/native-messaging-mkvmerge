@@ -6,7 +6,7 @@ const [hostName, mimeType, cmd, options, metadata, outputFileName, randomFileNam
   // use VP8, VP9 does not output variable resolution at Chromium
   "native_messaging_mkvmerge", "video/webm;codecs=vp8,opus"
   // path to mkvmerge at OS
-  , "./mkvmerge", "-o", "-J", "merged.webm", _ => "_" + ".".repeat(16).replace(/./g, _ =>
+  , "mkvmerge", "-o", "-J", "merged.webm", _ => "_" + ".".repeat(16).replace(/./g, _ =>
     "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ" [~~(Math.random() * 36)]), (tracks, type) => tracks.find(({
     type: t
   }) => t === type)
@@ -31,7 +31,7 @@ const updateUiState = _ => {
   // send native message to host
 const sendNativeMessage = async e => {
   try {
-    dir = await self["chooseFileSystemEntries" in self ? "chooseFileSystemEntries" : "showDirectoryPicker"]
+    dir = await self["showDirectoryPicker" in self ? "showDirectoryPicker" : "chooseFileSystemEntries"]();
     // https://bugs.chromium.org/p/chromium/issues/detail?id=986060
     status = await dir.requestPermission({
       writable: true
@@ -182,7 +182,7 @@ const sendNativeMessage = async e => {
           const fileHandle = await dir.getFile(fileName, {
             create: true
           });
-          const writer = await fileHandle["createWriter" in fileHandle ? "createWriter" : "createWritable"]();
+          const writer = await fileHandle["createWritable" in fileHandle ? "createWritable" : "createWriter"]();
           const writeFile = await writer.write(blob);
           return await writer.close();
         } catch (e) {
