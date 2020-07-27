@@ -182,7 +182,7 @@ const sendNativeMessage = async e => {
           const fileHandle = await dir.getFile(fileName, {
             create: true
           });
-          const writer = await fileHandle["createWritable" in fileHandle ? "createWritable" : "createWriter"]();
+          const writer = await fileHandle.createWritable();
           const writeFile = await writer.write(blob);
           return await writer.close();
         } catch (e) {
@@ -262,7 +262,7 @@ const onNativeMessage = async e => {
       // https://bugs.chromium.org/p/chromium/issues/detail?id=985665
       // `outputFileName` which is an element of and including `fileNames` array
       // are files on disk that will be deleted at the code below
-      result = new Blob([await (await (await dir.getFile(outputFileName, {
+      result = new Blob([await (await (await dir.getFileHandle(outputFileName, {
         create: false
       })).getFile()).arrayBuffer()], {
         type: mimeType
